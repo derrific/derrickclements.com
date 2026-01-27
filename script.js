@@ -1,7 +1,7 @@
 // script.js
 
 /* --- 1. LAVA LAMP ENGINE --- */
-const LAVA_SPEED = 175;
+const LAVA_SPEED = 5;
 document.body.style.setProperty('--lava-speed', `${LAVA_SPEED}s`);
 const randomOffset = Math.random() * LAVA_SPEED;
 document.body.style.setProperty('--lava-start', `-${randomOffset}s`);
@@ -915,13 +915,13 @@ function loadManualProject(data, containerId, suffix) {
     data.forEach((item, index) => {
         html += `<div class="rss-episode-slide ${index === 0 ? 'active' : ''}" id="slide-${suffix}-${index}">`;
 
-        // 1. IMAGE
+        // 1. IMAGE 
         if (item.image) {
             const imgSrc = `images/highlight-reel/${item.image}`;
             if (item.link) {
-                html += `<a href="${item.link}" target="_blank" class="rss-art-link"><img src="${imgSrc}" class="rss-art" alt="${item.title || 'Highlight'}"></a>`;
+                html += `<a href="${item.link}" target="_blank" class="rss-art-link"><img src="${imgSrc}" class="rss-art" loading="lazy" alt="${item.title || 'Highlight'}"></a>`;
             } else {
-                html += `<img src="${imgSrc}" class="rss-art" alt="${item.title || 'Highlight'}" style="cursor: default;">`;
+                html += `<img src="${imgSrc}" class="rss-art" loading="lazy" alt="${item.title || 'Highlight'}" style="cursor: default;">`;
             }
         }
 
@@ -1001,10 +1001,17 @@ function loadManualProject(data, containerId, suffix) {
     container.innerHTML = html;
 
     if (data.length > 1) {
-        const prevBtn = document.getElementById(`prev-${suffix}`);
-        const nextBtn = document.getElementById(`next-${suffix}`);
-        if (prevBtn) prevBtn.style.display = 'flex';
-        if (nextBtn) nextBtn.style.display = 'flex';
+        // 1. Activate Bottom Buttons (Standard)
+        const pBtn = document.getElementById(`prev-${suffix}`);
+        const nBtn = document.getElementById(`next-${suffix}`);
+        if (pBtn) pBtn.style.display = 'flex';
+        if (nBtn) nBtn.style.display = 'flex';
+
+        // 2. Activate Top Buttons (Mobile Only)
+        const pBtnTop = document.getElementById(`prev-${suffix}-top`);
+        const nBtnTop = document.getElementById(`next-${suffix}-top`);
+        if (pBtnTop) pBtnTop.style.display = 'flex';
+        if (nBtnTop) nBtnTop.style.display = 'flex';
     }
 
     playersToInit.forEach(uid => {
@@ -1030,7 +1037,7 @@ function loadPopoutGallery() {
                 <img 
                     src="${basePath}${data.thumb}" 
                     class="popout-art" 
-                    alt="${data.title}" 
+                    loading="lazy"  alt="${data.title}" 
                     onclick="openModal('${key}')"
                 >
             `;
