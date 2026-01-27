@@ -906,76 +906,93 @@ video.bsky-native-video { width: 100%; height: auto; display: block; border-radi
 
 /* --- 11. MOBILE RESPONSIVE --- */
 @media (max-width: 900px) {
-    /* 1. Global Reset: Everything is a simple vertical box */
+    /* 1. Global Layout & Padding */
     * { box-sizing: border-box !important; }
 
     body, #main-stage, .main-container, .content-wrapper {
         display: block !important;
         width: 100% !important;
         margin: 0 !important;
-        padding: 0 12px !important; /* This creates your side margins */
+        padding: 12px 12px !important; /* The 'Hero' spacing fix */
         height: auto !important;
         overflow-x: hidden !important;
         position: relative !important;
     }
 
-    /* 2. Section Fix: Stops the 'Infinite Stretch' and Overlap */
-    .intro-section, .highlight-reel, .project-popout-strip {
-        display: block !important;
+    /* 2. KILL THE GRID (This fixes the squished text) */
+    .bento-grid {
+        display: flex !important;
+        flex-direction: column !important; /* Stacks everything vertically */
+        gap: 20px !important;
         width: 100% !important;
-        height: auto !important;
-        position: relative !important;
-        top: auto !important;
-        left: auto !important;
-        margin-bottom: 25px !important;
-        padding: 20px !important;
-        border-radius: 20px !important;
     }
 
-    /* 3. Highlight Reel (Carousel) Fix */
-    .rss-feed, .rss-carousel {
+    /* 3. Reset ALL Cards to Full Width */
+    .card, .hero, .photo-card, .rss-feed, .social-dock, 
+    .bluesky-card, .letterboxd-card, .substack-card, .popout-card {
         display: block !important;
         width: 100% !important;
-        overflow: hidden !important;
+        grid-column: auto !important; /* Stops them from trying to span columns */
+        grid-row: auto !important;
+        margin: 0 !important;
+        height: auto !important;
+        min-height: auto !important;
+        position: relative !important;
+    }
+
+    /* 4. Fix the Photo Card specific height */
+    .photo-card {
+        height: 350px !important; /* Gives it a fixed height so it doesn't collapse */
+        width: 100% !important;
+        margin-bottom: 20px !important;
+    }
+
+    /* 5. CAROUSEL FIX (From previous step) */
+    .rss-slider-container {
+        display: block !important; 
+        height: auto !important;
+        min-height: unset !important;
     }
 
     .rss-episode-slide {
-        display: flex !important;
-        flex-direction: column !important; /* Stack image over text */
+        display: none !important;
         width: 100% !important;
-        min-width: 100% !important; /* Prevents seeing multiple cards */
-        height: auto !important;
-        align-items: center !important;
-        text-align: center !important;
+    }
+
+    .rss-episode-slide.active {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 15px !important;
+        animation: fadeIn 0.3s ease;
     }
 
     .rss-art {
         width: 100% !important;
-        max-width: 280px !important;
-        margin-bottom: 15px !important;
+        max-width: 300px !important;
+        height: auto !important;
+        aspect-ratio: 1/1 !important;
+        margin: 0 auto !important;
     }
 
-    /* 4. Button & Interaction Fix */
-    .carousel-controls {
+    .rss-details, .audio-block {
+        width: 100% !important;
+        padding: 0 !important;
+        text-align: center !important;
+    }
+
+    /* 6. BUTTON FIX (From previous step) */
+    .card-nav-center {
         display: flex !important;
         justify-content: center !important;
-        gap: 15px !important;
-        margin-top: 15px !important;
-        position: relative !important;
-        z-index: 10 !important;
+        gap: 20px !important;
+        margin-top: 20px !important;
+        z-index: 100 !important;
     }
 
-    .carousel-btn {
-        padding: 12px 20px !important;
-        min-width: 100px !important;
-        cursor: pointer !important;
-    }
-
-    /* 5. Bento Grid Stacking */
-    .bento-grid {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 15px !important;
-        width: 100% !important;
+    .nav-arrow {
+        padding: 12px 30px !important;
+        font-size: 0.9rem !important;
+        pointer-events: auto !important;
+        background: rgba(255, 255, 255, 0.15) !important;
     }
 }
