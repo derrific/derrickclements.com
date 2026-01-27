@@ -913,47 +913,68 @@ video.bsky-native-video { width: 100%; height: auto; display: block; border-radi
         display: block !important;
         width: 100% !important;
         margin: 0 !important;
-        padding: 12px 12px !important; /* The 'Hero' spacing fix */
+        padding: 12px 12px !important;
         height: auto !important;
         overflow-x: hidden !important;
         position: relative !important;
     }
 
-    /* 2. KILL THE GRID (This fixes the squished text) */
+    /* 2. KILL THE GRID (Stacks everything vertically) */
     .bento-grid {
         display: flex !important;
-        flex-direction: column !important; /* Stacks everything vertically */
+        flex-direction: column !important;
         gap: 20px !important;
         width: 100% !important;
     }
 
-    /* 3. Reset ALL Cards to Full Width */
-    .card, .hero, .photo-card, .rss-feed, .social-dock, 
+    /* 3. Card Resets */
+    .card, .hero, .photo-card, .social-dock, 
     .bluesky-card, .letterboxd-card, .substack-card, .popout-card {
         display: block !important;
         width: 100% !important;
-        grid-column: auto !important; /* Stops them from trying to span columns */
-        grid-row: auto !important;
-        margin: 0 !important;
         height: auto !important;
         min-height: auto !important;
-        position: relative !important;
+        margin: 0 !important;
     }
 
-    /* 4. Fix the Photo Card specific height */
     .photo-card {
-        height: 350px !important; /* Gives it a fixed height so it doesn't collapse */
-        width: 100% !important;
+        height: 350px !important; /* Forces height for the image */
         margin-bottom: 20px !important;
     }
 
-    /* 5. CAROUSEL FIX (From previous step) */
+    /* --- 4. THE "BUTTONS ON TOP" RE-ORDERING FIX --- */
+    .rss-feed {
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    /* Step A: Keep Title at the very top */
+    .rss-controls {
+        order: 1 !important;
+        margin-bottom: 15px !important;
+    }
+
+    /* Step B: Move Buttons to the Middle (Directly under title) */
+    .card-nav-center {
+        order: 2 !important;
+        display: flex !important;
+        justify-content: center !important;
+        gap: 20px !important;
+        margin-top: 0 !important; 
+        margin-bottom: 20px !important; /* Pushes the content down */
+        z-index: 100 !important;
+    }
+
+    /* Step C: Move Content to the Bottom */
     .rss-slider-container {
+        order: 3 !important;
         display: block !important; 
         height: auto !important;
         min-height: unset !important;
     }
+    /* ---------------------------------------------------- */
 
+    /* 5. Carousel Slide Styling */
     .rss-episode-slide {
         display: none !important;
         width: 100% !important;
@@ -980,19 +1001,12 @@ video.bsky-native-video { width: 100%; height: auto; display: block; border-radi
         text-align: center !important;
     }
 
-    /* 6. BUTTON FIX (From previous step) */
-    .card-nav-center {
-        display: flex !important;
-        justify-content: center !important;
-        gap: 20px !important;
-        margin-top: 20px !important;
-        z-index: 100 !important;
-    }
-
+    /* 6. Button Styling */
     .nav-arrow {
         padding: 12px 30px !important;
         font-size: 0.9rem !important;
         pointer-events: auto !important;
         background: rgba(255, 255, 255, 0.15) !important;
+        border-radius: 100px !important;
     }
 }
