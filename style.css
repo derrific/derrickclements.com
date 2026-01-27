@@ -906,8 +906,76 @@ video.bsky-native-video { width: 100%; height: auto; display: block; border-radi
 
 /* --- 11. MOBILE RESPONSIVE --- */
 @media (max-width: 900px) {
-    .bento-grid { grid-template-columns: 1fr; }
-    .hero, .photo-card, .rss-feed, .social-dock, .bluesky-card, .letterboxd-card, .substack-card { grid-column: span 1; grid-row: auto; }
-    .rss-episode-slide { flex-direction: column; align-items: flex-start; }
-    .rss-art { width: 100%; max-width: 300px; height: auto; aspect-ratio: 1/1; }
+    /* 1. Global Reset: Everything is a simple vertical box */
+    * { box-sizing: border-box !important; }
+
+    body, #main-stage, .main-container, .content-wrapper {
+        display: block !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 12px !important; /* This creates your side margins */
+        height: auto !important;
+        overflow-x: hidden !important;
+        position: relative !important;
+    }
+
+    /* 2. Section Fix: Stops the 'Infinite Stretch' and Overlap */
+    .intro-section, .highlight-reel, .project-popout-strip {
+        display: block !important;
+        width: 100% !important;
+        height: auto !important;
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        margin-bottom: 25px !important;
+        padding: 20px !important;
+        border-radius: 20px !important;
+    }
+
+    /* 3. Highlight Reel (Carousel) Fix */
+    .rss-feed, .rss-carousel {
+        display: block !important;
+        width: 100% !important;
+        overflow: hidden !important;
+    }
+
+    .rss-episode-slide {
+        display: flex !important;
+        flex-direction: column !important; /* Stack image over text */
+        width: 100% !important;
+        min-width: 100% !important; /* Prevents seeing multiple cards */
+        height: auto !important;
+        align-items: center !important;
+        text-align: center !important;
+    }
+
+    .rss-art {
+        width: 100% !important;
+        max-width: 280px !important;
+        margin-bottom: 15px !important;
+    }
+
+    /* 4. Button & Interaction Fix */
+    .carousel-controls {
+        display: flex !important;
+        justify-content: center !important;
+        gap: 15px !important;
+        margin-top: 15px !important;
+        position: relative !important;
+        z-index: 10 !important;
+    }
+
+    .carousel-btn {
+        padding: 12px 20px !important;
+        min-width: 100px !important;
+        cursor: pointer !important;
+    }
+
+    /* 5. Bento Grid Stacking */
+    .bento-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 15px !important;
+        width: 100% !important;
+    }
 }

@@ -1142,28 +1142,6 @@ const projectData = {
             }
         ]
     },
-    "puddle-creative": {
-        title: "Puddle Creative",
-        subtitle: "2020-Present",
-        thumb: "puddle-logo.webp",
-        sections: [
-            {
-                type: 'text', content: `
-                <p>I am on the team at <a href="https://www.puddlecreative.com/">Puddle Creative</a>, creating podcasts for our clients.</p>
-                <p>Each week, I receive raw audio and edit, mix, and publish multiple episodes, frequently on a same-day turnaround.</p>
-            ` },
-            {
-                type: 'image',
-                src: 'puddle-photo-1.webp',
-                caption: "The Puddle team in Portland, OR in Oct. 2022"
-            },
-            {
-                type: 'image',
-                src: 'puddle-photo-2.webp',
-                caption: "At the Signal Awards in 2023"
-            }
-        ]
-    },
     "off-the-cupp": {
         title: "Off the Cupp with S.E. Cupp",
         subtitle: "2024-Present",
@@ -1191,6 +1169,28 @@ const projectData = {
             {
                 type: 'rss',
                 src: 'https://media.rss.com/outlaws-and-outtakes/feed.xml'
+            }
+        ]
+    },
+    "puddle-creative": {
+        title: "Puddle Creative",
+        subtitle: "2020-Present",
+        thumb: "puddle-logo.webp",
+        sections: [
+            {
+                type: 'text', content: `
+                <p>I am on the team at <a href="https://www.puddlecreative.com/">Puddle Creative</a>, creating podcasts for our clients.</p>
+                <p>Each week, I receive raw audio and edit, mix, and publish multiple episodes, frequently on a same-day turnaround.</p>
+            ` },
+            {
+                type: 'image',
+                src: 'puddle-photo-1.webp',
+                caption: "The Puddle team in Portland, OR in Oct. 2022"
+            },
+            {
+                type: 'image',
+                src: 'puddle-photo-2.webp',
+                caption: "At the Signal Awards in 2023"
             }
         ]
     },
