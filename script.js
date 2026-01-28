@@ -1142,28 +1142,6 @@ const projectData = {
             ` },
         ]
     },
-    "puddle-creative": {
-        title: "Puddle Creative",
-        subtitle: "2020-Present",
-        thumb: "puddle-logo.webp",
-        sections: [
-            {
-                type: 'text', content: `
-                <p>I am on the team at <a href="https://www.puddlecreative.com/">Puddle Creative</a>, creating podcasts for our clients.</p>
-                <p>Each week, I receive raw audio and edit, mix, and publish multiple episodes, frequently on a same-day turnaround.</p>
-            ` },
-            {
-                type: 'image',
-                src: 'puddle-photo-1.webp',
-                caption: "The Puddle team in Portland, OR in Oct. 2022"
-            },
-            {
-                type: 'image',
-                src: 'puddle-photo-2.webp',
-                caption: "At the Signal Awards in 2023"
-            }
-        ]
-    },
     "outlaws-outtakes": {
         title: "Outlaws & Outtakes",
         subtitle: "2025-Present",
@@ -1192,6 +1170,28 @@ const projectData = {
                 type: 'rss',
                 src: 'https://rss.libsyn.com/shows/92585/destinations/465423.xml',
                 startDate: "2022-05-15" // Keeping your start date logic!
+            }
+        ]
+    },
+    "puddle-creative": {
+        title: "Puddle Creative",
+        subtitle: "2020-Present",
+        thumb: "puddle-logo.webp",
+        sections: [
+            {
+                type: 'text', content: `
+                <p>I am on the team at <a href="https://www.puddlecreative.com/">Puddle Creative</a>, creating podcasts for our clients.</p>
+                <p>Each week, I receive raw audio and edit, mix, and publish multiple episodes, frequently on a same-day turnaround.</p>
+            ` },
+            {
+                type: 'image',
+                src: 'puddle-photo-1.webp',
+                caption: "The Puddle team in Portland, OR in Oct. 2022"
+            },
+            {
+                type: 'image',
+                src: 'puddle-photo-2.webp',
+                caption: "At the Signal Awards in 2023"
             }
         ]
     },
@@ -1369,7 +1369,7 @@ const projectData = {
         sections: [
             {
                 type: 'text', content: `
-                <p>I co-hosted this arts and entertainment interview show with fellow arts reporter Court Mann. Our episode about <a href="https://archive.org/details/011-the-story-of-mykel-and-carli-weezers-most-legendary-fans"> two dedicated Weezer fans</a> was awarded 1st Place Best Podcast by the Utah Headliners Chapter of the Society of Professional Journalists.</p>
+                <p>I co-hosted this arts and entertainment interview show with fellow arts reporter Court Mann. Our <a href="https://archive.org/details/011-the-story-of-mykel-and-carli-weezers-most-legendary-fans"> episode about two dedicated Weezer fans</a> was awarded 1st Place Best Podcast by the Utah Headliners Chapter of the Society of Professional Journalists.</p>
             ` },
             {
                 type: 'image',
