@@ -356,6 +356,40 @@ async function loadRSSProject(rssUrl, containerId, suffix, filterText = null, se
 
 function moveSlide(suffix, direction) {
     const slides = document.querySelectorAll(`[id^="slide-${suffix}-"]`);
+    if (slides.length === 0) return;
+
+    // --- 1. SMART REPOSITIONING ---
+    // IF the top of the carousel has been scrolled past, snap it back into view.
+    const container = slides[0].parentElement;
+    const modalContent = container.closest('.modal-content');
+
+    if (modalContent) {
+        // Context: INSIDE A POPOUT MODAL
+        const containerRect = container.getBoundingClientRect();
+        const modalRect = modalContent.getBoundingClientRect();
+
+        // If the carousel top is above the modal's visible top edge
+        if (containerRect.top < modalRect.top) {
+            modalContent.scrollTo({
+                // Scroll to the element minus a 20px "breathing room" buffer
+                top: modalContent.scrollTop + (containerRect.top - modalRect.top) - 20,
+                behavior: 'smooth'
+            });
+        }
+    } else {
+        // Context: MAIN PAGE
+        const rect = container.getBoundingClientRect();
+
+        // If the carousel top is above the browser viewport (scrolled past)
+        if (rect.top < 0) {
+            window.scrollTo({
+                top: window.scrollY + rect.top - 20, // 20px buffer
+                behavior: 'smooth'
+            });
+        }
+    }
+
+    // --- 2. STANDARD SLIDE LOGIC ---
     document.querySelectorAll('audio').forEach(a => a.pause());
 
     slides[projectSlides[suffix]].classList.remove('active');
@@ -1064,75 +1098,6 @@ const staggeredLoad = () => {
     setTimeout(() => loadSubstack(), 1600);
 };
 
-/* --- HERO TYPEWRITER EFFECT --- */
-document.addEventListener("DOMContentLoaded", () => {
-    const paragraphs = document.querySelectorAll('.hero-text');
-    if (paragraphs.length === 0) return;
-
-    // 1. Prepare the data
-    const queue = Array.from(paragraphs).map(p => {
-        const rawText = p.innerText.replace(/\s+/g, ' ').trim();
-        const originalHTML = p.innerHTML;
-        return { element: p, cleanText: rawText, fullHtml: originalHTML };
-    });
-
-    // 2. Clear all text initially
-    queue.forEach(item => item.element.innerHTML = "");
-
-    let pIndex = 0;
-
-    function typeParagraph() {
-        if (pIndex >= queue.length) return;
-
-        const current = queue[pIndex];
-        const element = current.element;
-        const textToType = current.cleanText;
-
-        element.classList.add('typing-cursor');
-
-        let charIndex = 0;
-        let lastTypeTime = 0;
-
-        function frame(currentTime) {
-            if (!lastTypeTime) lastTypeTime = currentTime;
-
-            // TURBO SPEED:
-            // Min: 10ms | Max: 30ms | Average: 20ms per char
-            // This is roughly 2x faster than before.
-            const humanDelay = 10 + Math.random() * 20;
-
-            const elapsed = currentTime - lastTypeTime;
-
-            if (elapsed > humanDelay) {
-                // Type the character
-                if (charIndex < textToType.length) {
-                    element.textContent += textToType[charIndex];
-                    charIndex++;
-                    lastTypeTime = currentTime;
-                }
-            }
-
-            if (charIndex < textToType.length) {
-                requestAnimationFrame(frame);
-            } else {
-                // Paragraph Complete
-                element.classList.remove('typing-cursor');
-                element.innerHTML = current.fullHtml;
-
-                pIndex++;
-
-                // Short pause before next paragraph (250ms)
-                setTimeout(typeParagraph, 250);
-            }
-        }
-
-        requestAnimationFrame(frame);
-    }
-
-    // Start almost immediately (250ms)
-    setTimeout(typeParagraph, 250);
-});
-
 /* --- 8. PROJECT MODAL ENGINE --- */
 
 const projectData = {
@@ -1166,19 +1131,15 @@ const projectData = {
             }
         ]
     },
-    "outlaws-outtakes": {
-        title: "Outlaws & Outtakes",
-        subtitle: "2025-Present",
-        thumb: "outlaws-outtakes-logo.jpg",
+    "coming-soon": {
+        title: "Coming soon",
+        subtitle: "Spring 2026",
+        thumb: "iheart-podcasts-logo.webp",
         sections: [
             {
                 type: 'text', content: `
-                <p>I produce and edit the official podcast for Sundance Mountain Resort. Season One wrapped in 2025.</p>
+                <p>I am currently helping develop a new show with iHeartMedia. Check back soon!</p>
             ` },
-            {
-                type: 'rss',
-                src: 'https://media.rss.com/outlaws-and-outtakes/feed.xml'
-            }
         ]
     },
     "puddle-creative": {
@@ -1200,6 +1161,21 @@ const projectData = {
                 type: 'image',
                 src: 'puddle-photo-2.webp',
                 caption: "At the Signal Awards in 2023"
+            }
+        ]
+    },
+    "outlaws-outtakes": {
+        title: "Outlaws & Outtakes",
+        subtitle: "2025-Present",
+        thumb: "outlaws-outtakes-logo.jpg",
+        sections: [
+            {
+                type: 'text', content: `
+                <p>I produce and edit the official podcast for Sundance Mountain Resort. Season One wrapped in 2025.</p>
+            ` },
+            {
+                type: 'rss',
+                src: 'https://media.rss.com/outlaws-and-outtakes/feed.xml'
             }
         ]
     },
@@ -1371,7 +1347,7 @@ const projectData = {
     "cheeky-mormon": {
         title: "The Cheeky Mormon Movie Review",
         subtitle: "2017-2018",
-        thumb: "cheeky-mormon-logo.webp",
+        thumb: "thoughtful-faith-logo.jpg",
         sections: [
             {
                 type: 'text', content: `
@@ -1379,9 +1355,38 @@ const projectData = {
                 <p>On The Cheeky Mormon Movie Review, we applied a critical and analytical lens both to the films we discussed and to Mormonism as an institution and culture.</p>
             ` },
             {
+                type: 'rss',
+                src: 'https://anchor.fm/s/f7cdcfb0/podcast/rss',
+                filterText: "cheeky mormon",
+                forcedImage: "thoughtful-faith-logo.jpg"
+            }
+        ]
+    },
+    "what-say-ye": {
+        title: "What Say Ye?",
+        subtitle: "2016-2017",
+        thumb: "what-say-ye-logo.jpg",
+        sections: [
+            {
+                type: 'text', content: `
+                <p>I co-hosted this arts and entertainment interview show with fellow arts reporter Court Mann. Our episode about <a href="https://archive.org/details/011-the-story-of-mykel-and-carli-weezers-most-legendary-fans"> two dedicated Weezer fans</a> was awarded 1st Place Best Podcast by the Utah Headliners Chapter of the Society of Professional Journalists.</p>
+            ` },
+            {
                 type: 'image',
-                src: 'cheeky-mormon-logo-lg.webp'
-            },
+                src: "what-say-ye-logo.jpg"
+            }
+        ]
+    },
+    "daily-herald": {
+        title: "The Daily Herald",
+        subtitle: "2016-2018",
+        thumb: "",
+        sections: [
+            {
+                type: 'text', content: `
+                <p>I co-hosted and sound designed a series of movie reviews with Gina Colvin on her podcast <a href="https://www.athoughtfulfaith.org">A Thoughtful Faith</a>. </p>
+                <p>I wrote a column.</p>
+            ` },
             {
                 type: 'rss',
                 src: 'https://anchor.fm/s/f7cdcfb0/podcast/rss',
