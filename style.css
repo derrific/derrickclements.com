@@ -111,25 +111,36 @@ body::before {
     height: 100%;
     z-index: -1;
 
-    /* Deep Purple -> Soft Pink -> Deep Blue */
-    background-image: linear-gradient(-45deg, 
-        #240b36, #c31432, #240b36, #0f0c29
-    );
-    
+    /* LIGHTER HOLOGRAPHIC FOIL */
+    /* Old Dark Purple (#240b36) -> New Plum (#3a1254) */
+    /* Old Dark Blue (#0f0c29)   -> New Midnight (#201c4e) */
+    background-image: linear-gradient(-45deg,
+            #3a1254, #c31432, #3a1254, #201c4e);
+
     background-size: 400% 400%;
-    
-    /*Speed control*/
+
     animation: gradientSlide 40s ease-in-out infinite;
-    
-    pointer-events: none; 
+
+    /* THE RANDOMIZER: This accepts the time jump from your JavaScript */
+    animation-delay: var(--random-start, 0s);
+
+    pointer-events: none;
     will-change: background-position;
 }
 
 /* Ensure you have this animation block for the sliding effect */
 @keyframes gradientSlide {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 /* --- 4. GRID & CARDS --- */
@@ -192,20 +203,20 @@ body::before {
 /* --- 5. TYPOGRAPHY --- */
 
 /* H1 (Name): Fluid Size + No Snapping */
-h1 { 
+h1 {
     font-family: 'Inter', sans-serif;
-    font-weight: 700; 
-    
-    /* FIX: Lower the floor to 1.5rem so it fits in tiny windows */
-    font-size: clamp(1.5rem, 12vw, 4rem); 
-    line-height: 1.0; 
-    
-    word-break: normal !important;
-    overflow-wrap: normal !important; 
+    font-weight: 700;
 
-    margin: 0 0 1rem 0; 
-    letter-spacing: -2px; 
-    text-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+    /* FIX: Lower the floor to 1.5rem so it fits in tiny windows */
+    font-size: clamp(1.5rem, 12vw, 4rem);
+    line-height: 1.0;
+
+    word-break: normal !important;
+    overflow-wrap: normal !important;
+
+    margin: 0 0 1rem 0;
+    letter-spacing: -2px;
+    text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 /* H2 (Gold Headers): Manrope */
@@ -247,15 +258,15 @@ h2 {
 /* Hero Text */
 .hero-text {
     font-family: 'Inter', sans-serif;
-    font-size: clamp(1.3rem, 5vw, 1.7rem); 
-    
+    font-size: clamp(1.3rem, 5vw, 1.7rem);
+
     font-weight: 500;
     line-height: 1.5;
     color: var(--text-main);
     margin-top: 0;
     margin-bottom: 1rem;
-    white-space: normal; 
-    min-height: 1.5rem; 
+    white-space: normal;
+    min-height: 1.5rem;
 }
 
 /* The Blinking Cursor Effect */
@@ -291,13 +302,12 @@ p {
 }
 
 /* Episode Title */
-h3,
-.episode-title {
+h3, .episode-title {
+    margin: 0 !important; 
     font-family: 'Inter', sans-serif;
     font-size: 1.4rem;
     font-weight: 700;
-    margin-top: 0;
-    margin-bottom: 0.5rem;
+    line-height: 1.2; 
 }
 
 /* --- MINI TITLES --- */
@@ -366,6 +376,7 @@ a:hover {
 
 .rss-feed {
     grid-column: span 3;
+
 }
 
 .bluesky-card,
@@ -431,11 +442,15 @@ a:hover {
     flex-shrink: 0;
 }
 
+/* THE CONTAINER: Controls vertical spacing of the whole text block */
 .rss-details {
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    /* Centers vertically against the art */
+    gap: 0.5rem;
+    /* The master spacing unit (approx 8px) */
 }
 
 /* --- SPECIAL END SLIDE STYLES --- */
@@ -477,6 +492,8 @@ a:hover {
     line-height: 0;
     transition: transform 0.2s, filter 0.2s;
     border-radius: 16px;
+
+    margin-top: 8px;
 }
 
 .rss-art-link:hover {
@@ -484,14 +501,13 @@ a:hover {
     filter: brightness(1.1);
 }
 
-/* RSS Date */
 .rss-date {
+    margin: 0 !important; 
     font-family: 'Inter', sans-serif;
     font-size: 0.85rem;
     color: var(--accent);
     text-transform: uppercase;
     font-weight: 600;
-    margin-bottom: 4px;
     letter-spacing: 1px;
 }
 
@@ -669,7 +685,7 @@ a:hover {
 
 .popout-strip {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(max(200px, calc(25% - 1.5rem)), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(max(140px, calc(25% - 1.5rem)), 1fr));
     gap: 1.5rem;
     margin-top: 0;
     padding: 4px 5px 20px 5px;
@@ -789,6 +805,12 @@ a:hover {
     }
 }
 
+.youtube-embed {
+    width: 100%;
+    aspect-ratio: 16 / 9; /* The Magic Number for YouTube */
+    border-radius: 12px;
+    margin-bottom: 1.5rem; /* Adds breathing room below the video */
+}
 /* --- 8. BLUESKY FEED --- */
 .bsky-header,
 .feed-header {
@@ -1464,7 +1486,7 @@ video.bsky-native-video {
 
     /* 4. Highlight Reel Styling */
     .rss-feed {
-        display: block !important;
+        grid-column: span 3;
     }
 
     .rss-slider-container {
@@ -1493,11 +1515,26 @@ video.bsky-native-video {
         margin: 0 auto !important;
     }
 
-    .rss-details,
-    .audio-block {
+    .rss-art-link {
+        display: flex !important;
+        justify-content: center !important;
         width: 100% !important;
-        padding: 0 !important;
-        text-align: center !important;
+        margin-top: 0 !important;
+        /* Reset the desktop nudge we just added */
+        margin-bottom: 1rem !important;
+    }
+
+    .rss-details,
+
+    /* THE AUDIO WRAPPER: Controls spacing INSIDE the audio section */
+    .audio-block {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        /* Space between Description and Player */
+        margin: 0;
+        /* Reset */
+        width: 100%;
     }
 
     /* 5. Photo Card Fix */

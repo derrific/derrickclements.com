@@ -1,10 +1,12 @@
 // script.js
 
 /* --- 1. LAVA LAMP ENGINE --- */
-const LAVA_SPEED = 5;
-document.body.style.setProperty('--lava-speed', `${LAVA_SPEED}s`);
-const randomOffset = Math.random() * LAVA_SPEED;
-document.body.style.setProperty('--lava-start', `-${randomOffset}s`);
+// We match the CSS animation duration (40s) so the random jump can land anywhere in the loop.
+const ANIMATION_DURATION = 40; 
+const randomOffset = Math.random() * ANIMATION_DURATION;
+
+// We send this random negative number to CSS (e.g., "-12.5s")
+document.body.style.setProperty('--random-start', `-${randomOffset}s`);
 
 /* --- 2. TEXT & UTILITIES --- */
 function escapeHtml(text) {
@@ -944,24 +946,24 @@ function loadManualProject(data, containerId, suffix) {
             const uniqueId = `${suffix}-${index}-${secIndex}`;
 
             if (section.type === 'audio') {
-                html += `<div class="audio-block" style="margin-top: 1rem; margin-bottom: 1.5rem;">`;
+                html += `<div class="audio-block">`;
 
-                // A. MINI TITLE (Top Bun)
+                // A. MINI TITLE
                 if (section.title) {
                     html += `<div class="audio-mini-title">${section.title}</div>`;
                 }
 
-                // B. DESCRIPTION (The Meat - NOW IN THE MIDDLE)
+                // B. DESCRIPTION
                 if (section.desc) {
                     html += `
-                            <div class="rss-desc" id="rss-desc-${uniqueId}" style="margin-bottom: 1rem;">
+                            <div class="rss-desc" id="rss-desc-${uniqueId}">
                                 ${section.desc}
                             </div>
-                            <button class="read-more-btn" onclick="toggleDesc('${uniqueId}')" style="margin-bottom: 1rem;">Read More</button>
+                            <button class="read-more-btn" onclick="toggleDesc('${uniqueId}')">Read More</button>
                             `;
                 }
 
-                // C. PLAYER (Bottom Bun)
+                // C. PLAYER
                 html += `
                         <audio id="audio-${uniqueId}" src="${section.src}" preload="metadata"></audio>
                         <div class="custom-player-ui">
@@ -1141,7 +1143,7 @@ const projectData = {
         sections: [
             {
                 type: 'text', content: `
-                <p>I created <a href="https://thisgalactic.lfe">This Galactic Life</a> in order explore one of my passions (creative nonfiction audio) through one of my other passions (<i>Star Wars</i>). Or maybe it was the other way around...</p>
+                <p>I created <a href="https://thisgalactic.lfe">This Galactic Life</a> in order explore one of my passions (creative nonfiction audio) via one of my other passions (<i>Star Wars</i>). Or maybe it was the other way around...</p>
             ` },
             {
                 type: 'rss',
@@ -1224,7 +1226,7 @@ const projectData = {
         sections: [
             {
                 type: 'text', content: `
-                <p>I sound designed, edited, and engineered this fun show, which examines pop culture history in order to understand the present.</p>
+                <p>I am now nostalgic about working on a show about nostalgia! I sound designed, edited, and engineered this one, which examined pop culture history in order to understand the present.</p>
             ` },
             {
                 type: 'rss',
@@ -1248,8 +1250,8 @@ const projectData = {
         sections: [
             {
                 type: 'text', content: `
-                <p>I worked on Next Question with Katie Couric as editor, sound engineer, and associate producer. During that time, I recorded and edited at least one episode per week. </p>
-                <p>We also produced two special multi-part documentary series — Turnout and Abortion: The Body Politic.</p>
+                <p>I worked as editor, sound engineer, and associate producer, recording and editing at least one episode per week. </p>
+                <p>We also produced two special multi-part documentary series — <a href="#" onclick="openModal('turnout-kc'); return false;">Turnout</a> and <a href="#" onclick="openModal('abortion-kc'); return false;">Abortion: The Body Politic</a>.</p>
             ` },
             {
                 type: 'rss',
@@ -1284,14 +1286,14 @@ const projectData = {
             }
         ]
     },
-    "abortion-bp": {
+    "abortion-kc": {
         title: "Abortion: The Body Politic",
         subtitle: "2022",
-        thumb: "abortion-bp-logo.webp",
+        thumb: "abortion-kc-logo.webp",
         sections: [
             {
                 type: 'text', content: `
-                <p>I edited, sound designed, and mixed this special series of Next Question with Katie Couric. The series examined abortion rights in America as Roe v Wade was in process of being overturned in the Supreme Court.</p>
+                <p>I edited, sound designed, and mixed this special series of <a href="#" onclick="openModal('next-question'); return false;">Next Question with Katie Couric</a>. The series examined abortion rights in America as Roe v Wade was in process of being overturned in the Supreme Court.</p>
             ` },
             {
                 type: 'rss',
@@ -1310,7 +1312,14 @@ const projectData = {
                 type: 'text', content: `
                 <p>I contributed a chapter in the book <a href="https://www.amazon.com/Mormonism-Movies-Chris-Wei/dp/1948218461/ref=monarch_sidesheet"><i>Mormonism and the Movies</i></a>, published in 2021 by <a href="https://www.bccpress.org/">BCC Press</a>.</p>
             ` },
-            { type: 'image', src: 'mormonism-movies.webp' },
+            { 
+                type: 'html', 
+                content: `
+                    <img src="images/project-popouts/mormonism-movies.webp" 
+                         style="max-width: 400px; width: 100%; display: block; margin: 0 auto 1.5rem auto; border-radius: 12px;" 
+                         alt="Mormonism and the Movies Book Cover">
+                ` 
+            },
         ]
     },
     "turnout-kc": {
@@ -1320,7 +1329,7 @@ const projectData = {
         sections: [
             {
                 type: 'text', content: `
-                <p>I edited, sound designed, and mixed this special series of Next Question with Katie Couric. The series examined the accessibility of voting access in America.</p>
+                <p>I edited, sound designed, and mixed this special series of <a href="#" onclick="openModal('next-question'); return false;">Next Question with Katie Couric</a>. The series examined the accessibility of voting access in America.</p>
             ` },
             {
                 type: 'rss',
@@ -1337,7 +1346,7 @@ const projectData = {
         sections: [
             {
                 type: 'text', content: `
-                <p>I edited the Netflix podcast Watching With…, which featured audio commentary tracks. As I edited each episode, I ensured that the filmmakers' commentary synced up with the films in the final version of the podcast audio.</p>
+                <p>I worked on this Netflix podcast featuring audio commentary tracks. As I edited each episode, I ensured that the filmmakers' commentary continually synced up with the films in the final version of the podcast audio.</p>
             ` },
             {
                 type: 'rss',
@@ -1354,7 +1363,7 @@ const projectData = {
         sections: [
             {
                 type: 'text', content: `
-                <p>I edited a dozen episodes of the weekly Netflix podcast The Human Algorithm, where employees shared what they were watching on Netflix.</p>
+                <p>I edited a dozen episodes of this weekly Netflix podcast, where employees shared what they were watching on Netflix.</p>
             ` },
             { type: 'image', src: 'human-algo-logo.webp' }
         ]
@@ -1362,13 +1371,17 @@ const projectData = {
     "cheeky-mormon": {
         title: "The Cheeky Mormon Movie Review",
         subtitle: "2017-2018",
-        thumb: "cheeky-mormon-jedi.png",
+        thumb: "cheeky-mormon-logo.webp",
         sections: [
             {
                 type: 'text', content: `
                 <p>I co-hosted and sound designed a series of movie reviews with Gina Colvin on her podcast <a href="https://www.athoughtfulfaith.org">A Thoughtful Faith</a>. </p>
                 <p>On The Cheeky Mormon Movie Review, we applied a critical and analytical lens both to the films we discussed and to Mormonism as an institution and culture.</p>
             ` },
+            {
+                type: 'image',
+                src: 'cheeky-mormon-logo-lg.webp'
+            },
             {
                 type: 'rss',
                 src: 'https://anchor.fm/s/f7cdcfb0/podcast/rss',
@@ -1389,15 +1402,15 @@ const projectData = {
             { type: 'image', src: 'the-porch-logo.webp' },
             {
                 type: 'html', content: `
-                <iframe width="100%" height="315" src="https://www.youtube.com/embed/diFXYs--5VU?si=jFkETAPfwEQwjGZJ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                <iframe class="youtube-embed" src="https://www.youtube.com/embed/diFXYs--5VU?si=jFkETAPfwEQwjGZJ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
             `},
             {
                 type: 'html', content: `
-                <iframe width="100%" height="315" src="https://www.youtube.com/embed/L1rmXJpxP20?si=ULNY1nUwfRaLda0I" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                <iframe class="youtube-embed" src="https://www.youtube.com/embed/L1rmXJpxP20?si=ULNY1nUwfRaLda0I" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
             `},
             {
                 type: 'html', content: `
-                <iframe width="100%" height="315" src="https://www.youtube.com/embed/yAT6WgFnHZE?si=ixHxe6FKX17kofNO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                <iframe class="youtube-embed" src="https://www.youtube.com/embed/yAT6WgFnHZE?si=ixHxe6FKX17kofNO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
             `}
         ]
     },
@@ -1459,6 +1472,9 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function openModal(id) {
+    // 1. UPDATE THE URL (Deep Linking)
+    window.location.hash = id;
+
     const modal = document.getElementById('project-modal');
     const container = document.getElementById('modal-body-content');
 
@@ -1578,6 +1594,10 @@ function openModal(id) {
 function closeModal(e) {
     if (e && e.target !== e.currentTarget) return;
 
+    // 1. RESET THE URL
+    // This removes the #hash without reloading the page
+    history.pushState("", document.title, window.location.pathname + window.location.search); // <--- ADD THIS LINE
+
     const modal = document.getElementById('project-modal');
     modal.classList.remove('open');
 
@@ -1593,3 +1613,15 @@ document.addEventListener('keydown', (e) => {
 
 // Start the sequence
 staggeredLoad();
+
+/* --- 10. DEEP LINKING (The URL Catcher) --- */
+document.addEventListener("DOMContentLoaded", () => {
+    // 1. Read the URL hash (remove the '#' symbol)
+    const hash = window.location.hash.substring(1);
+
+    // 2. If we have a hash, and it matches a project ID...
+    if (hash && projectData[hash]) {
+        // 3. Open that modal immediately
+        openModal(hash);
+    }
+});
