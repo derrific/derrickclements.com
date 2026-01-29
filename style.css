@@ -12,6 +12,44 @@
     --substack-orange: #ff6719;
 }
 
+/* --- LOADING STATE --- */
+
+/* 1. The Pulse Animation for the button */
+@keyframes buttonPulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(0.9); opacity: 0.7; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.play-btn.loading {
+    animation: buttonPulse 1s infinite ease-in-out;
+    cursor: wait;
+}
+
+/* 2. The Text Animation (Loading . .. ...) */
+.loading-text {
+    font-size: 0.85rem;
+    color: var(--accent);
+    font-weight: 600;
+    font-style: italic;
+    min-width: 80px; /* Prevents layout jumps */
+    display: inline-block;
+    text-align: left; /* Aligns dots nicely */
+}
+
+/* This adds the dots automatically! */
+.loading-text::after {
+    content: '';
+    animation: dots 1.5s steps(4, end) infinite;
+}
+
+@keyframes dots {
+    0%, 20% { content: ''; }
+    40% { content: '.'; }
+    60% { content: '..'; }
+    80%, 100% { content: '...'; }
+}
+
 /* --- 2. ANIMATIONS --- */
 @keyframes fadeIn {
     from {

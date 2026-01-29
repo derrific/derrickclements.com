@@ -174,28 +174,83 @@ function setupPlayer(audioId, btnId, barId, fillId, timeId) {
 
     if (!audio) return;
 
+    // SVG Icons
+    const ICON_PLAY = `<svg width="14" height="16" viewBox="0 0 14 16" fill="currentColor"><path d="M1 1L13 8L1 15V1Z"/></svg>`;
+    const ICON_PAUSE = `<svg width="14" height="16" viewBox="0 0 14 16" fill="currentColor"><rect x="1" y="1" width="4" height="14"/><rect x="9" y="1" width="4" height="14"/></svg>`;
+
+    // --- CLICK HANDLER ---
     playBtn.addEventListener('click', () => {
         if (audio.paused) {
-            document.querySelectorAll('audio').forEach(a => a.pause());
-            audio.play();
-            playBtn.innerHTML = `<svg width="14" height="16" viewBox="0 0 14 16" fill="currentColor"><rect x="1" y="1" width="4" height="14"/><rect x="9" y="1" width="4" height="14"/></svg>`;
+            // 1. Stop all other audio first
+            document.querySelectorAll('audio').forEach(a => {
+                if (a !== audio) {
+                    a.pause();
+                    a.currentTime = 0; 
+                }
+            });
+
+            // 2. SHOW LOADING INSTANTLY (Visual Feedback)
+            playBtn.classList.add('loading');
+            timeDisplay.innerHTML = `<span class="loading-text">Loading</span>`;
+
+            // 3. Attempt to play
+            audio.play().catch(e => {
+                // Safety catch: If play fails (e.g. strict browser policy), reset UI
+                console.error("Playback failed:", e);
+                playBtn.classList.remove('loading');
+                playBtn.innerHTML = ICON_PLAY;
+                timeDisplay.innerText = "Error";
+            });
+
         } else {
             audio.pause();
-            playBtn.innerHTML = `<svg width="14" height="16" viewBox="0 0 14 16" fill="currentColor"><path d="M1 1L13 8L1 15V1Z"/></svg>`;
         }
     });
 
+    // --- EVENT LISTENERS ---
+    
+    // 1. BUFFERING (Mid-stream hiccups)
+    // Only show loading if we are technically "playing" but stuck waiting
+    audio.addEventListener('waiting', () => {
+        if (!audio.paused) {
+            playBtn.classList.add('loading');
+            timeDisplay.innerHTML = `<span class="loading-text">Loading</span>`;
+        }
+    });
+
+    // 2. PLAYING (Success!)
+    audio.addEventListener('playing', () => {
+        playBtn.classList.remove('loading');
+        playBtn.innerHTML = ICON_PAUSE;
+    });
+
+    // 3. PAUSED
+    audio.addEventListener('pause', () => {
+        playBtn.classList.remove('loading');
+        playBtn.innerHTML = ICON_PLAY;
+        timeDisplay.innerText = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration || 0)}`;
+    });
+
+    // 4. PROGRESS UPDATE
     audio.addEventListener('timeupdate', () => {
         if (!audio.duration) return;
+        
+        // Don't overwrite "Loading..." if we are buffering
+        if(playBtn.classList.contains('loading')) return;
+
         const percent = (audio.currentTime / audio.duration) * 100;
         progressFill.style.width = `${percent}%`;
         timeDisplay.innerText = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
     });
 
+    // 5. SCRUBBING
     progressContainer.addEventListener('click', (e) => {
         const width = progressContainer.clientWidth;
         const clickX = e.offsetX;
-        audio.currentTime = (clickX / width) * audio.duration;
+        const duration = audio.duration;
+        if(duration) {
+            audio.currentTime = (clickX / width) * duration;
+        }
     });
 }
 
