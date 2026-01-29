@@ -692,6 +692,65 @@ a:hover {
     transform: scale(0.95);
 }
 
+/* --- HERO BUTTON (Email) --- */
+.hero-btn {
+    /* Base Styles */
+    background: rgba(255, 255, 255, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    
+    color: white;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    
+    /* Shape & Size */
+    padding: 0 24px;
+    height: 44px;
+    border-radius: 100px;
+    
+    /* THE FIX: Universal Centering */
+    display: flex;              /* Was: inline-flex */
+    width: fit-content;         /* Ensures it doesn't stretch to full width */
+    margin: 1.5rem auto 0 auto; /* Centers it in both Block and Flex layouts */
+    align-items: center;
+    justify-content: center;
+    
+    /* Interaction */
+    cursor: pointer;
+    text-decoration: none; 
+    transition: all 0.2s;
+}
+
+/* Hover Effects (Keep these the same) */
+.hero-btn:hover {
+    background: var(--accent);
+    color: black;
+    transform: scale(1.05);
+    border-color: transparent;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    text-decoration: none;
+}
+
+.hero-btn:active {
+    transform: scale(0.95);
+}
+
+/* Hover Effects */
+.hero-btn:hover {
+    background: var(--accent);
+    color: black;
+    transform: scale(1.05);
+    border-color: transparent;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    text-decoration: none;
+}
+
+.hero-btn:active {
+    transform: scale(0.95);
+}
+
 /* --- POPOUT GALLERY --- */
 .popout-card {
     grid-column: span 3;
