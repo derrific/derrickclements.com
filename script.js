@@ -696,40 +696,43 @@ async function loadBluesky() {
 
 /* --- 6. OTHER FEEDS (Letterboxd & Substack) --- */
 async function loadLetterboxd() {
-    // 1. Keep the timestamp to ensure we get a fresh file from Letterboxd
-    const LB_RSS = `https://letterboxd.com/derrific/rss/?t=${new Date().getTime()}`;
+    // 1. URL for the RSS Feed
+    const LB_RSS = "https://letterboxd.com/derrific/rss/";
     const container = document.getElementById('letterboxd-container');
 
     try {
-        // 2. Use corsproxy.io (like your podcast) instead of rss2json
-        const res = await fetch(`https://corsproxy.io/?${encodeURIComponent(LB_RSS)}`);
-        if (!res.ok) throw new Error('Proxy failed');
-
-        // 3. Manually parse the XML
-        const str = await res.text();
-        const xmlDoc = new DOMParser().parseFromString(str, "text/xml");
-        const items = Array.from(xmlDoc.querySelectorAll("item"));
+        // 2. Use rss2json (Reliable JSON API) instead of a raw proxy
+        const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(LB_RSS)}`);
+        
+        if (!res.ok) throw new Error('API failed');
+        
+        const data = await res.json();
+        const items = data.items; // This is now a clean JSON array
 
         let html = "";
 
-        // 4. Loop through the XML items directly
+        // 3. Loop through the JSON items
         items.slice(0, 10).forEach(item => {
-            const link = item.querySelector("link").textContent;
-            const title = item.querySelector("title").textContent;
-            const pubDate = item.querySelector("pubDate").textContent;
-            const description = item.querySelector("description").textContent;
+            const link = item.link;
+            const title = item.title;
+            const pubDate = item.pubDate;
+            const description = item.description || item.content; // rss2json sometimes puts body in 'content'
 
-            // Extract the poster image from the description HTML
+            // Extract the poster image from the HTML description using Regex
             const posterSrc = description.match(/src="([^"]+)"/)?.[1];
 
-            // Clean up the title (remove the year if needed)
-            let cleanTitle = title.split(' - ')[0].replace(/, (\d{4})$/, ' ($1)');
+            // Clean up the title (Remove the stars/rating for the header)
+            // Example: "Star Wars (1977) - ★★★★★" becomes "Star Wars (1977)"
+            let cleanTitle = title.split(' - ')[0];
             const dateString = new Date(pubDate).toLocaleDateString();
 
             if (posterSrc) {
+                // Resize logic: Letterboxd sends tiny thumbnails. 
+                // We can try to grab the larger version by removing the suffix if available,
+                // but usually the default from rss2json is okay for small cards.
                 html += `
                 <a href="${link}" target="_blank" class="lb-item">
-                    <img src="${posterSrc}" class="lb-poster-mini">
+                    <img src="${posterSrc}" class="lb-poster-mini" alt="${cleanTitle}">
                     <div class="lb-overlay">
                         <div class="lb-meta-title">${cleanTitle}</div>
                         <div class="lb-meta-date">Logged on ${dateString}</div>
@@ -737,8 +740,10 @@ async function loadLetterboxd() {
                 </a>`;
             }
         });
+
         container.innerHTML = html;
         updateScrollButtons(document.getElementById('letterboxd-scroll-area'));
+
     } catch (e) {
         console.error(e);
         container.innerHTML = "<p style='padding:1.2rem; color:#888'>Failed to load Letterboxd.</p>";
