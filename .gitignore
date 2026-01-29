@@ -6,3 +6,6 @@
 
 # Ignore local environment files (if we add them later)
 .env
+
+# Ignore the private testing lab
+lab/
