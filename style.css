@@ -196,14 +196,10 @@ body::before {
 h1 {
     font-family: 'Inter', sans-serif;
     font-weight: 700;
-
-    /* FIX: Lower the floor to 1.5rem so it fits in tiny windows */
-    font-size: clamp(1.5rem, 12vw, 4rem);
+    font-size: clamp(1.5rem, 3vw, 2.5rem) !important;
     line-height: 1.0;
-
     word-break: normal !important;
     overflow-wrap: normal !important;
-
     margin: 0 0 1rem 0;
     letter-spacing: -2px;
     text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
@@ -373,6 +369,7 @@ a:hover {
     grid-row: span 2;
     justify-content: flex-start !important;
     padding-top: 3rem;
+    container-type: inline-size;
 }
 
 .photo-card {

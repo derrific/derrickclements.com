@@ -1138,7 +1138,7 @@ const projectData = {
         sections: [
             {
                 type: 'text', content: `
-                <p>I am currently helping develop a new show with iHeartMedia. Check back soon!</p>
+                <p>I am working on a new show that is  in development with iHeartMedia. Check back soon!</p>
             ` },
         ]
     },
