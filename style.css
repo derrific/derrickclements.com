@@ -249,8 +249,9 @@ h2 {
 .hero-statement {
     font-family: 'Inter', sans-serif;
     font-weight: 600;
-    font-size: clamp(1.8rem, 3.5vw, 2.5rem);
-    line-height: 1.1;
+    font-size: clamp(2.3rem, 3.5vw, 2.5rem);
+    line-height: 1;
+    letter-spacing: 0.1px !important;
     color: var(--text-main);
     margin: 0 0 1rem 0;
 }
@@ -269,7 +270,7 @@ h2 {
 /* Hero Text */
 .hero-text {
     font-family: 'Inter', sans-serif;
-    font-size: clamp(1.3rem, 2vw, 1.5rem);
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
     font-weight: 500;
     line-height: 1.3;
     color: var(--text-main);
@@ -600,8 +601,15 @@ a:hover {
     justify-content: center;
 }
 
-.play-btn:hover {
-    transform: scale(1.1);
+@media (hover: hover) {
+    .play-btn:hover {
+        transform: scale(1.1);
+        background: var(--accent);
+    }
+}
+
+.play-btn:active {
+    transform: scale(0.95);
     background: var(--accent);
 }
 
@@ -671,17 +679,20 @@ a:hover {
     transition: all 0.2s;
 }
 
-.nav-arrow:hover {
-    background: var(--accent);
-    color: black;
-    transform: scale(1.05);
-    border-color: transparent;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+@media (hover: hover) {
+    .nav-arrow:hover {
+        background: var(--accent);
+        color: black;
+        transform: scale(1.05);
+        border-color: transparent;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
 }
 
-.nav-arrow:hover {
+.nav-arrow:active {
     background: var(--accent);
     color: black;
+    transform: scale(0.95);
 }
 
 /* --- POPOUT GALLERY --- */
@@ -762,23 +773,41 @@ a:hover {
 }
 
 .modal-close {
-    position: absolute;
-    top: 1.5rem;
-    right: 1.5rem;
-    background: rgba(255, 255, 255, 0.1);
-    border: none;
+    /* 1. STICKY BEHAVIOR */
+    position: sticky;
+    
+    /* THE FIX: Go Negative! */
+    /* -12px pulls the 'sticky ceiling' higher than the screen edge */
+    /* This forces the button up to align with the text. */
+    top: -15px;
+    
+    float: right; 
+
+    /* 2. THE SLINGSHOT */
+    margin-top: -5rem;   
+    
+    /* 3. SIDE SPACING (Keep the -1rem that fixed the scrollbar gap) */
+    margin-right: -1rem; 
+    
+    /* 4. VISIBILITY */
+    background: rgba(0, 0, 0, 0.85); 
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(4px);
+    
     color: white;
     font-size: 2rem;
-    width: 44px;
-    height: 44px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     line-height: 1;
-    transition: background 0.2s;
-    z-index: 10;
+    transition: all 0.2s;
+    z-index: 100;
+    
+    margin-bottom: -48px; 
 }
 
 .modal-close:hover {
@@ -810,9 +839,25 @@ a:hover {
     .modal-close {
         top: 1rem;
         right: 1rem;
-        width: 36px;
-        height: 36px;
-        font-size: 1.5rem;
+        font-size: 2rem;
+        margin-top: -1rem !important; 
+        margin-right: -1.5rem !important;
+        /* 2. CLEAR GHOST RULES */
+        /* This ensures no hidden 'right' or 'left' rules are interfering */
+        right: auto !important;
+        left: auto !important;
+
+        /* 3. THE FORCE MOVE (The Fix) */
+        /* translateX(15px) moves it 15px to the RIGHT */
+        /* translateY(0px) keeps the vertical spot you liked */
+        transform: translate(-20px, 0px) !important;
+
+        /* Ensure width/height are cleared so they inherit desktop size */
+        width: 48px !important; 
+        height: 48px !important;
+        
+        /* Keep your preferred top position */
+        top: 0px !important;
     }
 }
 
@@ -898,10 +943,17 @@ a:hover {
     transition: all 0.2s;
 }
 
-.v-btn:hover {
+@media (hover: hover) {
+    .v-btn:hover {
+        background: var(--accent);
+        color: black;
+        transform: scale(1.1);
+    }
+}
+
+.v-btn:active {
     background: var(--accent);
-    color: black;
-    transform: scale(1.1);
+    transform: scale(0.9);
 }
 
 .v-sep {
@@ -1345,13 +1397,22 @@ video.bsky-native-video {
     transition: all 0.2s ease;
 }
 
-.social-link:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: white !important;
-    border-color: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    transform: scale(1.05);
-    text-decoration: none !important;
+/* WRAPPED: Only hover if the user has a mouse */
+@media (hover: hover) {
+    .social-link:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: white !important;
+        border-color: rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        transform: scale(1.05);
+        text-decoration: none !important;
+    }
+}
+
+/* ACTIVE: Gives a "tap" flash on mobile */
+.social-link:active {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(0.96);
 }
 
 .social-link span {
