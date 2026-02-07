@@ -1591,6 +1591,36 @@ video.bsky-native-video {
     text-decoration: none !important;
 }
 
+/* --- DEBUG LABEL (Hidden by default) --- */
+.debug-label {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    
+    /* Tech Look */
+    background: rgba(0, 0, 0, 0.75);
+    color: #00ff00; /* Hacker Green */
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid #00ff00;
+    
+    /* Functional */
+    z-index: 100;
+    pointer-events: none; /* Lets you click "through" it */
+    display: none; /* Hidden! */
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+/* We toggle this class with JS */
+.debug-label.visible {
+    display: block;
+    opacity: 1;
+}
+
 /* --- 11. MOBILE RESPONSIVE --- */
 
 /* A. DESKTOP GUARD RAIL: Strictly hide the top buttons on large screens */

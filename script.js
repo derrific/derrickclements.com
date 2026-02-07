@@ -2,7 +2,7 @@
 
 /* --- 1. LAVA LAMP ENGINE --- */
 // We match the CSS animation duration (40s) so the random jump can land anywhere in the loop.
-const ANIMATION_DURATION = 40; 
+const ANIMATION_DURATION = 40;
 const randomOffset = Math.random() * ANIMATION_DURATION;
 
 // We send this random negative number to CSS (e.g., "-12.5s")
@@ -185,7 +185,7 @@ function setupPlayer(audioId, btnId, barId, fillId, timeId) {
             document.querySelectorAll('audio').forEach(a => {
                 if (a !== audio) {
                     a.pause();
-                    a.currentTime = 0; 
+                    a.currentTime = 0;
                 }
             });
 
@@ -208,7 +208,7 @@ function setupPlayer(audioId, btnId, barId, fillId, timeId) {
     });
 
     // --- EVENT LISTENERS ---
-    
+
     // 1. BUFFERING (Mid-stream hiccups)
     // Only show loading if we are technically "playing" but stuck waiting
     audio.addEventListener('waiting', () => {
@@ -234,9 +234,9 @@ function setupPlayer(audioId, btnId, barId, fillId, timeId) {
     // 4. PROGRESS UPDATE
     audio.addEventListener('timeupdate', () => {
         if (!audio.duration) return;
-        
+
         // Don't overwrite "Loading..." if we are buffering
-        if(playBtn.classList.contains('loading')) return;
+        if (playBtn.classList.contains('loading')) return;
 
         const percent = (audio.currentTime / audio.duration) * 100;
         progressFill.style.width = `${percent}%`;
@@ -248,7 +248,7 @@ function setupPlayer(audioId, btnId, barId, fillId, timeId) {
         const width = progressContainer.clientWidth;
         const clickX = e.offsetX;
         const duration = audio.duration;
-        if(duration) {
+        if (duration) {
             audio.currentTime = (clickX / width) * duration;
         }
     });
@@ -758,9 +758,9 @@ async function loadLetterboxd() {
     try {
         // 2. Use rss2json (Reliable JSON API) instead of a raw proxy
         const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(LB_RSS)}`);
-        
+
         if (!res.ok) throw new Error('API failed');
-        
+
         const data = await res.json();
         const items = data.items; // This is now a clean JSON array
 
@@ -1348,13 +1348,13 @@ const projectData = {
                 type: 'text', content: `
                 <p>I contributed a chapter in the book <a href="https://www.amazon.com/Mormonism-Movies-Chris-Wei/dp/1948218461/ref=monarch_sidesheet"><i>Mormonism and the Movies</i></a>, published in 2021 by <a href="https://www.bccpress.org/">BCC Press</a>.</p>
             ` },
-            { 
-                type: 'html', 
+            {
+                type: 'html',
                 content: `
                     <img src="images/project-popouts/mormonism-movies.webp" 
                          style="max-width: 400px; width: 100%; display: block; margin: 0 auto 1.5rem auto; border-radius: 12px;" 
                          alt="Mormonism and the Movies Book Cover">
-                ` 
+                `
             },
         ]
     },
@@ -1497,40 +1497,100 @@ const projectData = {
     }
 };
 
-/* --- 9. PHOTO RANDOMIZER (SHUFFLED DECK) --- */
+/* --- 9. HERO IMAGE ENGINE (WITH DEBUG MODE) --- */
 document.addEventListener("DOMContentLoaded", () => {
     const photoCard = document.querySelector('.photo-card');
     if (!photoCard) return;
 
-    // 1. Define your 6 images
-    const photos = [
-        "me-1.webp", "me-2.webp", "me-3.webp", "me-4.webp", "me-5.webp"
-    ];
-
-    // 2. SHUFFLE THE DECK (Runs once on page load)
-    // This randomizes the array order immediately
-    photos.sort(() => Math.random() - 0.5);
-
-    let currentIndex = 0;
-
-    function updatePhoto() {
-        // Set the background to the current card in our shuffled deck
-        photoCard.style.backgroundImage = `url('images/${photos[currentIndex]}')`;
+    // --- CONFIGURATION ---
+    const startImage = "me-main.webp";
+    
+    // Generate filenames me-1.webp to me-199.webp
+    const galleryFiles = [];
+    for (let i = 1; i <= 199; i++) {
+        galleryFiles.push(`me-${i}.webp`);
     }
 
-    // 3. Initial Load (Show the first card of the shuffled deck)
-    updatePhoto();
+    // --- SETUP PATHS ---
+    const mainPath = `images/hero-main/${startImage}`;
+    const galleryPaths = galleryFiles.map(file => `images/hero-all/${file}`);
 
-    // 4. On Click: Deal the next card
+    // Shuffle the gallery
+    for (let i = galleryPaths.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [galleryPaths[i], galleryPaths[j]] = [galleryPaths[j], galleryPaths[i]];
+    }
+
+    // --- DEBUG UI CREATION ---
+    // We create the label via JS so you don't clutter your HTML
+    const debugLabel = document.createElement('div');
+    debugLabel.className = 'debug-label';
+    photoCard.appendChild(debugLabel);
+
+    // --- LOGIC ---
+    let currentIndex = -1; 
+    let cKeyPressed = false;
+
+    function updatePhoto(url) {
+        photoCard.style.backgroundImage = `url('${url}')`;
+        
+        // Extract just the filename (e.g. "me-12.webp") for the label
+        const fileName = url.split('/').pop();
+        debugLabel.innerText = fileName;
+        
+        // Also log to console (Just in case you prefer checking there)
+        // console.log("Current Photo:", fileName);
+    }
+
+    function preloadImage(url) {
+        const img = new Image();
+        img.src = url;
+    }
+
+    // --- INPUT LISTENERS (The Secret Handshake) ---
+    const checkDebugVisibility = () => {
+        // Only show if C is pressed AND mouse is hovering
+        if (cKeyPressed && photoCard.matches(':hover')) {
+            debugLabel.classList.add('visible');
+        } else {
+            debugLabel.classList.remove('visible');
+        }
+    };
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key.toLowerCase() === 'c') {
+            cKeyPressed = true;
+            checkDebugVisibility();
+        }
+    });
+
+    document.addEventListener('keyup', (e) => {
+        if (e.key.toLowerCase() === 'c') {
+            cKeyPressed = false;
+            checkDebugVisibility();
+        }
+    });
+
+    photoCard.addEventListener('mouseenter', checkDebugVisibility);
+    photoCard.addEventListener('mouseleave', () => {
+        debugLabel.classList.remove('visible');
+    });
+
+    // --- INITIALIZATION ---
+    updatePhoto(mainPath);
+    if (galleryPaths.length > 0) preloadImage(galleryPaths[0]);
+
+    // --- CLICK HANDLER ---
     photoCard.addEventListener('click', () => {
         currentIndex++;
+        if (currentIndex >= galleryPaths.length) currentIndex = 0;
 
-        // If we reach the end of the deck, loop back to the start
-        if (currentIndex >= photos.length) {
-            currentIndex = 0;
-        }
+        const nextUrl = galleryPaths[currentIndex];
+        updatePhoto(nextUrl);
 
-        updatePhoto();
+        let nextIndex = currentIndex + 1;
+        if (nextIndex >= galleryPaths.length) nextIndex = 0;
+        preloadImage(galleryPaths[nextIndex]);
     });
 
     photoCard.style.cursor = "pointer";
