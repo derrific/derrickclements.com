@@ -1738,14 +1738,15 @@ video.bsky-native-video {
 
 /* 5. Photo Card Fix */
     .photo-card {
-        /* Cinematic Strip Look */
         width: 100% !important;
-        min-height: 240px !important; /* Reduced from 400px to make it a wide strip */
-        aspect-ratio: 16 / 9; /* Enforces the movie screen shape */
         
-        background-position: center center !important; /* Centers the face vertically */
+        /* Matches 921x610 (approx 1.5 ratio) */
+        aspect-ratio: 3 / 2 !important; 
         
-        /* Keep these resets */
+        /* Let the aspect ratio decide the height */
+        min-height: auto !important; 
+        
+        background-position: center center !important;
         margin-bottom: 20px !important;
         background-size: cover !important;
         background-repeat: no-repeat !important;
