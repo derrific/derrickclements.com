@@ -1736,17 +1736,22 @@ video.bsky-native-video {
         width: 100%;
     }
 
-    /* 5. Photo Card Fix */
+/* 5. Photo Card Fix */
     .photo-card {
-        height: 400px !important;
+        /* Cinematic Strip Look */
         width: 100% !important;
+        min-height: 240px !important; /* Reduced from 400px to make it a wide strip */
+        aspect-ratio: 16 / 9; /* Enforces the movie screen shape */
+        
+        background-position: center center !important; /* Centers the face vertically */
+        
+        /* Keep these resets */
         margin-bottom: 20px !important;
-        background-color: transparent !important;
         background-size: cover !important;
-        background-position: center top !important;
         background-repeat: no-repeat !important;
         border-radius: 28px !important;
         border: none !important;
+        background-color: transparent !important;
     }
 
     /* 6. Social Feeds Window Fix */
