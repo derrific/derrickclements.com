@@ -416,7 +416,7 @@ a:hover {
     background-color: rgba(0, 0, 0, 0.5);
     aspect-ratio: 3 / 2;
     min-height: auto;
-    background-size: 110%;
+    background-size: 100%;
     background-position: center 20%;
     background-repeat: no-repeat;
 }
@@ -1736,19 +1736,21 @@ video.bsky-native-video {
         width: 100%;
     }
 
-/* 5. Photo Card Fix */
+/* 5. Photo Card Fix (Mobile) */
     .photo-card {
         width: 100% !important;
+        aspect-ratio: 3 / 2 !important; /* Matches your Desktop shape */
         
-        /* Matches 921x610 (approx 1.5 ratio) */
-        aspect-ratio: 3 / 2 !important; 
+        /* MATCH DESKTOP ZOOM */
+        /* Desktop uses 110% width, so we must use 110% here too */
+        background-size: 100% !important; 
         
-        /* Let the aspect ratio decide the height */
-        min-height: auto !important; 
+        /* MATCH DESKTOP ALIGNMENT */
+        /* Desktop uses 'center 20%' (focus on upper face). We must match that. */
+        background-position: center 20% !important;
         
-        background-position: center center !important;
+        /* Standard Resets */
         margin-bottom: 20px !important;
-        background-size: cover !important;
         background-repeat: no-repeat !important;
         border-radius: 28px !important;
         border: none !important;
