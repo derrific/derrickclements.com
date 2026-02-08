@@ -416,7 +416,7 @@ a:hover {
     background-color: rgba(0, 0, 0, 0.5);
     aspect-ratio: 3 / 2;
     min-height: auto;
-    background-size: 100%;
+    background-size: cover !important;
     background-position: center 20%;
     background-repeat: no-repeat;
 }
@@ -1743,7 +1743,7 @@ video.bsky-native-video {
         
         /* MATCH DESKTOP ZOOM */
         /* Desktop uses 110% width, so we must use 110% here too */
-        background-size: 100% !important; 
+        background-size: cover !important;
         
         /* MATCH DESKTOP ALIGNMENT */
         /* Desktop uses 'center 20%' (focus on upper face). We must match that. */
