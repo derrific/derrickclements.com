@@ -1176,6 +1176,22 @@ const projectData = {
             }
         ]
     },
+    "mostly-human": {
+        title: "Mostly Human",
+        subtitle: "2026-Present",
+        thumb: "mostly-human-logo.webp",
+        sections: [
+            {
+                type: 'text', content: `
+                <p>I edit, sound design, and mix the show, which is hosted by Laurie Segall.</p>
+            ` },
+            {
+                type: 'rss',
+                src: 'https://www.omnycontent.com/d/playlist/e73c998e-6e60-432f-8610-ae210140c5b1/7810e6c6-1d35-4388-bf34-ae270179ee9b/04f79453-97a9-4500-a84e-ae270179eea9/podcast.rss',
+                startDate: "2026-03-01" // Keeping your start date logic!
+            }
+        ]
+    },
     "off-the-cupp": {
         title: "Off the Cupp with S.E. Cupp",
         subtitle: "2024-Present",
@@ -1191,14 +1207,15 @@ const projectData = {
             }
         ]
     },
+
     "coming-soon": {
         title: "Coming soon",
-        subtitle: "Spring 2026",
+        subtitle: "Date Unknown",
         thumb: "iheart-podcasts-logo.webp",
         sections: [
             {
                 type: 'text', content: `
-                <p>I am working on a new show that is  in development with iHeartMedia. Check back soon!</p>
+                <p>I am working on a new show that is in development with iHeartMedia. Check back soon!</p>
             ` },
         ]
     },
